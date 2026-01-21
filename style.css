@@ -1,0 +1,58 @@
+:root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --primary: #3b82f6;
+    --danger: #ef4444;
+    --accent: #10b981;
+}
+
+body {
+    background-color: var(--bg);
+    color: white;
+    font-family: sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    direction: rtl;
+}
+
+.game-container { width: 100%; max-width: 500px; padding: 15px; }
+.logo { text-align: center; margin-bottom: 15px; font-size: 1.8rem; }
+.logo span { color: var(--danger); font-size: 1.2rem; display: block; }
+
+.controls { background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 20px; }
+.input-group { display: flex; gap: 8px; margin-bottom: 10px; }
+input { flex: 1; padding: 12px; border-radius: 8px; border: none; outline: none; }
+
+.action-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+button { cursor: pointer; border: none; border-radius: 8px; font-weight: bold; padding: 10px; }
+.btn-add { background: var(--accent); color: white; }
+.btn-info { background: var(--primary); color: white; }
+.btn-reset { background: #64748b; color: white; }
+
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+
+.animal-card {
+    background: linear-gradient(145deg, #2c3e50, #1a252f);
+    aspect-ratio: 1/1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    font-size: 2rem;
+    box-shadow: 0 4px 0 #000;
+    transition: 0.3s;
+}
+
+.animal-card:active { transform: scale(0.9); }
+.animal-card span { font-size: 0.75rem; margin-top: 5px; color: #cbd5e1; }
+
+ul { list-style: none; padding: 0; text-align: right; max-height: 300px; overflow-y: auto; }
+li { padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; color: #333; }
+.btn-delete { background: none; color: var(--danger); font-size: 1.2rem; }
+
+.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 100; align-items: center; justify-content: center; }
+.modal-content { background: white; color: #333; padding: 25px; border-radius: 20px; width: 85%; text-align: center; }
+.elim-icon { font-size: 5rem; margin-bottom: 10px; }
+.btn-continue { background: var(--bg); color: white; width: 100%; margin-top: 15px; padding: 12px; }
