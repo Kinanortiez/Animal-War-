@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حرب الحيوانات - إقصاء الأيقونات</title>
+    <title>حرب الحيوانات - ملك الغابة</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -26,8 +26,14 @@
             <p id="playerCount" style="text-align: center; margin-top: 10px; font-weight: bold;">اللاعبون النشطون: 0</p>
         </section>
 
-        <main class="grid" id="gameGrid">
-            </main>
+        <main class="grid" id="gameGrid"></main>
+
+        <div id="winnerZone" style="display: none; text-align: center; margin-top: 20px;">
+            <button onclick="revealWinner()" class="btn-reveal">
+                <span>👑</span>
+                اكتشف ملك الغابة
+            </button>
+        </div>
     </div>
 
     <div id="listModal" class="modal">
@@ -44,6 +50,16 @@
             <h2>تم إقصاء: <span id="eliminatedName"></span></h2>
             <p id="beastMsg"></p>
             <button onclick="closeElimModal()" class="btn-continue">متابعة</button>
+        </div>
+    </div>
+
+    <div id="winModal" class="modal">
+        <div class="modal-content winner">
+            <div class="win-icon">👑</div>
+            <h1 style="color: #d4af37;">مبروك!</h1>
+            <h2>تم تتويجك ملك الغابة</h2>
+            <h3 id="winnerName" style="font-size: 2.5rem; margin: 15px 0; color: #1e293b;"></h3>
+            <button onclick="resetGame()" class="btn-continue" style="background: #d4af37;">لعبة جديدة</button>
         </div>
     </div>
 
