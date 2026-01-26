@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حرب الحيوانات - ملك الغابة</title>
+    <title>حرب الحيوانات - 5 أعمدة</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,25 +20,25 @@
             </div>
             
             <div class="action-buttons">
-                <button onclick="togglePlayerList()" class="btn-info">📋 اللاعبون</button>
-                <button onclick="resetGame()" class="btn-reset">🔄 إعادة</button>
+                <button onclick="togglePlayerList()" class="btn-info">📋 القائمة</button>
+                <button onclick="fullReset()" class="btn-reset">⚠️ تصفير</button>
             </div>
-            <p id="playerCount" style="text-align: center; margin-top: 10px; font-weight: bold;">اللاعبون النشطون: 0</p>
+            <p id="playerCount" style="text-align: center; margin-top: 5px; font-weight: bold; font-size: 0.9rem;">اللاعبون: 0</p>
         </section>
 
         <main class="grid" id="gameGrid"></main>
 
         <div id="winnerZone" style="display: none; text-align: center; margin-top: 20px;">
             <button onclick="revealWinner()" class="btn-reveal">
-                <span>👑</span>
-                اكتشف ملك الغابة
+                <span>👑</span><br>
+                اكتشف الملك
             </button>
         </div>
     </div>
 
     <div id="listModal" class="modal">
         <div class="modal-content">
-            <h3>إدارة اللاعبين</h3>
+            <h3>اللاعبون</h3>
             <ul id="fullPlayerList"></ul>
             <button onclick="togglePlayerList()" class="btn-continue">إغلاق</button>
         </div>
@@ -57,11 +57,16 @@
         <div class="modal-content winner">
             <div class="win-icon">👑</div>
             <h1 style="color: #d4af37;">مبروك!</h1>
-            <h2>تم تتويجك ملك الغابة</h2>
-            <h3 id="winnerName" style="font-size: 2.5rem; margin: 15px 0; color: #1e293b;"></h3>
-            <button onclick="resetGame()" class="btn-continue" style="background: #d4af37;">لعبة جديدة</button>
+            <h2>ملك الغابة</h2>
+            <h3 id="winnerName" class="winner-text"></h3>
+            <button onclick="fullReset()" class="btn-continue" style="background: #d4af37;">لعبة جديدة</button>
         </div>
     </div>
+
+    <audio id="soundLose" src="https://www.myinstants.com/media/sounds/bonk_sound_effect.mp3"></audio>
+
+<audio id="soundWin" src="https://www.myinstants.com/media/sounds/kids_cheering.mp3"></audio>
+
 
     <script src="script.js"></script>
 </body>
