@@ -1,3 +1,4 @@
+// القائمة الكاملة (45 حيوان)
 const allPossibleBeasts = [
     {e: "🦁", n: "أسد"}, {e: "🐯", n: "نمر"}, {e: "🐆", n: "فهد"}, {e: "🐺", n: "ذئب"},
     {e: "🦊", n: "ثعلب"}, {e: "🐻", n: "دب"}, {e: "🐨", n: "كوالا"}, {e: "🐼", n: "باندا"},
@@ -8,18 +9,21 @@ const allPossibleBeasts = [
     {e: "🦈", n: "قرش"}, {e: "🐬", n: "دلفين"}, {e: "🐙", n: "أخطبوط"}, {e: "🦀", n: "سلطعون"},
     {e: "🕷️", n: "عنكبوت"}, {e: "🦂", n: "عقرب"}, {e: "🐝", n: "نحلة"}, {e: "🦋", n: "فراشة"},
     {e: "🐜", n: "نملة"}, {e: "🦗", n: "جندب"}, {e: "🦟", n: "بعوضة"}, {e: "🐌", n: "حلزون"},
-    {e: "🐞", n: "دعسوقة"}, {e: "🦎", n: "سحلية"}, {e: "🦇", n: "خفاش"}, {e: "🐒", n: "قرد"}
+    {e: "🐞", n: "دعسوقة"}, {e: "🦎", n: "سحلية"}, {e: "🦇", n: "خفاش"}, {e: "🐒", n: "قرد"},
+    {e: "🦫", n: "قندس"}, {e: "🦔", n: "قنفذ"}, {e: "🦚", n: "طاووس"}, {e: "🦩", n: "فلامينجو"}, {e: "🐧", n: "بطريق"}
 ];
 
 let players = [];
 let activeBeasts = [];
 let gameStarted = false;
 
+window.onload = function() { loadGameData(); };
+
 function addPlayer() {
     const input = document.getElementById('playerName');
     const name = input.value.trim();
 
-    if (players.length >= 40) return alert("الحد الأقصى 40 لاعب");
+    if (players.length >= 45) return alert("الحد الأقصى 45 لاعب");
     if (name !== "") {
         players.push(name);
         input.value = "";
@@ -30,25 +34,22 @@ function addPlayer() {
             activeBeasts.push(available[rand]);
         }
         
+        saveGameData();
         updatePlayerCount();
         reDistributeAndRender();
     }
 }
 
 function updatePlayerCount() {
-    document.getElementById('playerCount').innerText = `اللاعبون النشطون: ${players.length}`;
+    document.getElementById('playerCount').innerText = `اللاعبون: ${players.length}`;
 }
 
 function reDistributeAndRender() {
-    // إخفاء منطقة الفائز بشكل افتراضي
     document.getElementById('winnerZone').style.display = "none";
-    
-    // إذا بقي لاعب واحد وبدأت اللعبة، لا نرسم الشبكة بل نظهر زر الفوز
     if (gameStarted && players.length === 1) {
-        document.getElementById('gameGrid').innerHTML = ""; // مسح الأيقونة الأخيرة
-        document.getElementById('winnerZone').style.display = "block"; // إظهار زر التتويج
+        document.getElementById('gameGrid').innerHTML = ""; 
+        document.getElementById('winnerZone').style.display = "block"; 
     } else {
-        // خلط اللاعبين ورسم الشبكة كالمعتاد
         players = players.sort(() => Math.random() - 0.5);
         renderGrid();
     }
@@ -61,33 +62,39 @@ function renderGrid() {
         const card = document.createElement('div');
         card.className = "animal-card";
         card.innerHTML = `${beast.e} <span>${beast.n}</span>`;
-        card.onclick = () => handleElimination(index);
+        card.onclick = () => handleElimination(index, card);
         grid.appendChild(card);
     });
 }
 
-function handleElimination(index) {
+function handleElimination(index, cardElement) {
     if (players.length <= 1) return;
 
     gameStarted = true;
-    const eliminatedPlayer = players[index];
-    const beast = activeBeasts[index];
+    playSound('lose');
+    cardElement.classList.add('card-removing');
 
-    document.getElementById('elimAnimalIcon').innerText = beast.e;
-    document.getElementById('eliminatedName').innerText = eliminatedPlayer;
-    document.getElementById('beastMsg').innerText = `تم إقصاؤك بواسطة: ${beast.n}`;
-    document.getElementById('elimModal').style.display = "flex";
+    setTimeout(() => {
+        const eliminatedPlayer = players[index];
+        const beast = activeBeasts[index];
 
-    players.splice(index, 1);
-    activeBeasts.splice(index, 1);
+        document.getElementById('elimAnimalIcon').innerText = beast.e;
+        document.getElementById('eliminatedName').innerText = eliminatedPlayer;
+        document.getElementById('beastMsg').innerText = `بواسطة: ${beast.n}`;
+        document.getElementById('elimModal').style.display = "flex";
 
-    updatePlayerCount();
-    reDistributeAndRender();
+        players.splice(index, 1);
+        activeBeasts.splice(index, 1);
+
+        saveGameData();
+        updatePlayerCount();
+        reDistributeAndRender();
+    }, 300);
 }
 
-// هذه الدالة تعمل عند الضغط على زر "اكتشف ملك الغابة"
 function revealWinner() {
     if (players.length === 1) {
+        playSound('win');
         document.getElementById('winnerName').innerText = players[0];
         document.getElementById('winModal').style.display = "flex";
     }
@@ -96,8 +103,10 @@ function revealWinner() {
 function removePlayer(index) {
     players.splice(index, 1);
     activeBeasts.splice(index, 1);
+    saveGameData();
     updatePlayerCount();
     reDistributeAndRender();
+    renderPlayerList();
 }
 
 function renderPlayerList() {
@@ -105,7 +114,7 @@ function renderPlayerList() {
     listUl.innerHTML = "";
     players.forEach((p, i) => {
         let li = document.createElement('li');
-        li.innerHTML = `<span>👤 ${p}</span> <button class="btn-delete" onclick="removePlayer(${i}); renderPlayerList();">❌</button>`;
+        li.innerHTML = `<span>👤 ${p}</span> <button class="btn-delete" onclick="removePlayer(${i})">حذف</button>`;
         listUl.appendChild(li);
     });
 }
@@ -124,13 +133,40 @@ function closeElimModal() {
     document.getElementById('elimModal').style.display = "none";
 }
 
-function resetGame() {
-    players = [];
-    activeBeasts = [];
-    gameStarted = false;
-    document.getElementById('winModal').style.display = "none";
-    document.getElementById('winnerZone').style.display = "none";
-    document.getElementById('listModal').style.display = "none";
-    updatePlayerCount();
-    renderGrid();
+function saveGameData() {
+    const gameState = { players: players, activeBeasts: activeBeasts, gameStarted: gameStarted };
+    localStorage.setItem('animalWarData', JSON.stringify(gameState));
+}
+
+function loadGameData() {
+    const savedData = localStorage.getItem('animalWarData');
+    if (savedData) {
+        const data = JSON.parse(savedData);
+        players = data.players || [];
+        activeBeasts = data.activeBeasts || [];
+        gameStarted = data.gameStarted || false;
+        updatePlayerCount();
+        reDistributeAndRender();
+    }
+}
+
+function fullReset() {
+    if(confirm("هل أنت متأكد من الحذف والبدء من جديد؟")) {
+        players = [];
+        activeBeasts = [];
+        gameStarted = false;
+        localStorage.removeItem('animalWarData');
+        document.getElementById('winModal').style.display = "none";
+        document.getElementById('winnerZone').style.display = "none";
+        document.getElementById('listModal').style.display = "none";
+        updatePlayerCount();
+        renderGrid();
+    }
+}
+
+function playSound(type) {
+    try {
+        const sound = document.getElementById(type === 'win' ? 'soundWin' : 'soundLose');
+        if (sound) { sound.currentTime = 0; sound.play().catch(e => {}); }
+    } catch (e) {}
 }
